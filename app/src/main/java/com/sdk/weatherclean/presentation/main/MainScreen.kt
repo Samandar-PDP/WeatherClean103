@@ -11,11 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdk.weatherclean.presentation.component.BottomBar
+import com.sdk.weatherclean.presentation.component.CustomTopBar
 import com.sdk.weatherclean.presentation.favorite.FavoriteScreen
 import com.sdk.weatherclean.presentation.locations.LocationsScreen
 import com.sdk.weatherclean.presentation.screen.BottomBarScreen
@@ -26,15 +30,16 @@ import com.sdk.weatherclean.util.Graph
 @Composable
 fun MainScreen() {
     val navHostController = rememberNavController()
+    val current by navHostController.currentBackStackEntryAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = { Text(text = "Locations") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+            CustomTopBar(
+                title = current?.destination?.route.toString(),
+                isBackIconVisible = false,
+                onClick = {
+                    navHostController.popBackStack()
+                }
             )
         },
         bottomBar = {

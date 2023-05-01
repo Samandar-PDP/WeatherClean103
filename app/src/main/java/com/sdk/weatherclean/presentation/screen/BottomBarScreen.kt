@@ -12,14 +12,14 @@ sealed class BottomBarScreen(
 ) {
     object Locations: BottomBarScreen(
         icon = Icons.Default.LocationOn,
-        route = "locations"
+        route = "Locations"
     )
     object Favorite: BottomBarScreen(
         icon = Icons.Outlined.Favorite,
-        route = "favorite"
+        route = "Favorite"
     )
     object Settings: BottomBarScreen(
         icon = Icons.Default.Settings,
-        route = "settings"
+        route = "Settings"
     )
 }

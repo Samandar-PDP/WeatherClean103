@@ -29,7 +29,7 @@ fun BottomBar(navHostController: NavHostController) {
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navHostController.navigate(screen.route) {
-                            popUpTo("locations")
+                            popUpTo("Locations")
                             launchSingleTop = true
                         }
                     },

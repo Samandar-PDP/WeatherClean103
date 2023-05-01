@@ -1,4 +1,4 @@
-package com.example.weathercleanarch103.presentation.screen
+package com.sdk.weatherclean.presentation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
