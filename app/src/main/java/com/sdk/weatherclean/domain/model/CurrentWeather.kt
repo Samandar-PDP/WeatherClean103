@@ -11,6 +11,7 @@ data class CurrentWeather(
     val humidity: Int,
     val name: String,
     val timeZone: Int,
+    val wind: Double,
     val country: String,
     val id: Int
 )

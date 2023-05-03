@@ -3,6 +3,8 @@ package com.sdk.weatherclean.di
 import com.sdk.weatherclean.data.remote.WeatherService
 import com.sdk.weatherclean.data.repository.NetworkRepositoryImpl
 import com.sdk.weatherclean.domain.repository.NetworkRepository
+import com.sdk.weatherclean.domain.use_case.all.AllUseCases
+import com.sdk.weatherclean.domain.use_case.remote.GetCurrentWeatherUseCase
 import com.sdk.weatherclean.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -45,5 +47,12 @@ object NetworkModule {
     @Singleton
     fun provideNetworkRepository(service: WeatherService): NetworkRepository {
         return NetworkRepositoryImpl(service)
+    }
+
+    @[Provides Singleton]
+    fun provideAllUseCases(networkRepository: NetworkRepository): AllUseCases {
+        return AllUseCases(
+            getCurrentWeatherUseCase = GetCurrentWeatherUseCase(networkRepository)
+        )
     }
 }

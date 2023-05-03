@@ -15,6 +15,7 @@ fun CurrentWeatherDTO.toCurrentWeather(): CurrentWeather {
         humidity = main.humidity,
         name = name,
         timeZone = timezone,
+        wind = wind.speed,
         id = id,
         country = sys.country
     )
