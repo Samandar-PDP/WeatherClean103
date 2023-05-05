@@ -20,23 +20,28 @@ class LocationViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            allUseCases.getCurrentWeatherUseCase("moscow")
-                .onStart {
-                    _state.update {
-                        it.copy(isLoading = true)
+        onEvent(LocationEvent.OnSearched("andijan"))
+    }
+    fun onEvent(event: LocationEvent) {
+        if (event is LocationEvent.OnSearched) {
+            viewModelScope.launch {
+                allUseCases.getCurrentWeatherUseCase(event.query)
+                    .onStart {
+                        _state.update {
+                            it.copy(isLoading = true)
+                        }
                     }
-                }
-                .catch { th ->
-                    _state.update {
-                        it.copy(isLoading = false, message = th.message.toString())
+                    .catch { th ->
+                        _state.update {
+                            it.copy(isLoading = false, message = th.message.toString())
+                        }
                     }
-                }
-                .collect { currentWeather ->
-                    _state.update {
-                        it.copy(isLoading = false, success = currentWeather)
+                    .collect { currentWeather ->
+                        _state.update {
+                            it.copy(isLoading = false, success = currentWeather)
+                        }
                     }
-                }
+            }
         }
     }
 }

@@ -2,8 +2,10 @@ package com.sdk.weatherclean.di
 
 import com.sdk.weatherclean.data.remote.WeatherService
 import com.sdk.weatherclean.data.repository.NetworkRepositoryImpl
+import com.sdk.weatherclean.domain.repository.LocalRepository
 import com.sdk.weatherclean.domain.repository.NetworkRepository
 import com.sdk.weatherclean.domain.use_case.all.AllUseCases
+import com.sdk.weatherclean.domain.use_case.local.SaveFavoriteWeatherUseCase
 import com.sdk.weatherclean.domain.use_case.remote.GetCurrentWeatherUseCase
 import com.sdk.weatherclean.util.Constants
 import dagger.Module
@@ -17,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [DatabaseModule::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
@@ -50,9 +52,13 @@ object NetworkModule {
     }
 
     @[Provides Singleton]
-    fun provideAllUseCases(networkRepository: NetworkRepository): AllUseCases {
+    fun provideAllUseCases(
+        networkRepository: NetworkRepository,
+        localRepository: LocalRepository
+    ): AllUseCases {
         return AllUseCases(
-            getCurrentWeatherUseCase = GetCurrentWeatherUseCase(networkRepository)
+            getCurrentWeatherUseCase = GetCurrentWeatherUseCase(networkRepository),
+            saveFavoriteWeatherUseCase = SaveFavoriteWeatherUseCase(localRepository)
         )
     }
 }

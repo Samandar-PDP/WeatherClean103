@@ -34,10 +34,9 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun LocationsScreen() {
-    val viewModel = hiltViewModel<LocationViewModel>()
-    val state by viewModel.state.collectAsState()
-
+fun LocationsScreen(
+    state: LocationScreenState
+) {
     val currentTime by remember {
         mutableStateOf(SimpleDateFormat("EEE, MMM dd", Locale.getDefault()).format(Date()))
     }
@@ -53,6 +52,11 @@ fun LocationsScreen() {
                 .padding(5.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = weather.name,
+                style = MaterialTheme.typography.displayMedium
+            )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = currentTime,
@@ -80,7 +84,7 @@ fun LocationsScreen() {
                 text = weather.title,
                 style = MaterialTheme.typography.headlineSmall
             )
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             Divider(
                 thickness = 2.dp,
                 color = Color.Black,
@@ -100,7 +104,10 @@ fun WeatherItem(
     icon: Int
 ) {
     Spacer(modifier = Modifier.height(8.dp))
-    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

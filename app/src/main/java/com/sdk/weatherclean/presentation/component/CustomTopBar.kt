@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,8 +26,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomTopBar(
     title: String,
-    isBackIconVisible: Boolean,
-    onClick: () -> Unit
+    isSearchIconVisible: Boolean,
+    onSearchClicked: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -40,16 +41,18 @@ fun CustomTopBar(
                 .padding(start = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AnimatedVisibility(visible = isBackIconVisible) {
-                IconButton(onClick = onClick) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "", tint = Color.White)
-                }
-                Spacer(modifier = Modifier.width(5.dp))
-            }
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             )
+            AnimatedVisibility(visible = isSearchIconVisible) {
+                IconButton(onClick = onSearchClicked) {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+                }
+            }
         }
     }
 }

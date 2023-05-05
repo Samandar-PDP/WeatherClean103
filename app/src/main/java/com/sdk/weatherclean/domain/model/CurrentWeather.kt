@@ -1,5 +1,9 @@
 package com.sdk.weatherclean.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class CurrentWeather(
     val long: Double,
     val lat: Double,
@@ -14,4 +18,7 @@ data class CurrentWeather(
     val wind: Double,
     val country: String,
     val id: Int
-)
+) {
+    @PrimaryKey(autoGenerate = true)
+    val roomId: Int = 0
+}
