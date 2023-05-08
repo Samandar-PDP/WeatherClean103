@@ -1,5 +1,6 @@
 package com.sdk.weatherclean.presentation.locations
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdk.weatherclean.domain.use_case.all.AllUseCases
@@ -22,6 +23,7 @@ class LocationViewModel @Inject constructor(
     init {
         onEvent(LocationEvent.OnSearched("andijan"))
     }
+
     fun onEvent(event: LocationEvent) {
         if (event is LocationEvent.OnSearched) {
             viewModelScope.launch {
@@ -40,7 +42,22 @@ class LocationViewModel @Inject constructor(
                         _state.update {
                             it.copy(isLoading = false, success = currentWeather)
                         }
+                        allUseCases.getWeatherByIdUseCase(_state.value.success?.id!!)
+                            .collect { weather ->
+                                _state.update {
+                                    it.copy(isLiked = weather != null)
+                                }
+                            }
                     }
+            }
+        } else if (event is LocationEvent.OnUpdateWeather) {
+            viewModelScope.launch {
+                Log.d("@@@", "onEvent: ${event.currentWeather} ${_state.value.isLiked}")
+                if (_state.value.isLiked) {
+                    allUseCases.deleteWeatherByIdUseCase(event.currentWeather.id)
+                } else {
+                    allUseCases.saveFavoriteWeatherUseCase(event.currentWeather)
+                }
             }
         }
     }

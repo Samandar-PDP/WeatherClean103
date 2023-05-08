@@ -5,7 +5,12 @@ import com.sdk.weatherclean.data.repository.NetworkRepositoryImpl
 import com.sdk.weatherclean.domain.repository.LocalRepository
 import com.sdk.weatherclean.domain.repository.NetworkRepository
 import com.sdk.weatherclean.domain.use_case.all.AllUseCases
+import com.sdk.weatherclean.domain.use_case.local.DeleteWeatherByIdUseCase
+import com.sdk.weatherclean.domain.use_case.local.GetAllFavoriteWeathersUseCase
+import com.sdk.weatherclean.domain.use_case.local.GetThemeUseCase
+import com.sdk.weatherclean.domain.use_case.local.GetWeatherByIdUseCase
 import com.sdk.weatherclean.domain.use_case.local.SaveFavoriteWeatherUseCase
+import com.sdk.weatherclean.domain.use_case.local.SaveThemeUseCase
 import com.sdk.weatherclean.domain.use_case.remote.GetCurrentWeatherUseCase
 import com.sdk.weatherclean.util.Constants
 import dagger.Module
@@ -58,7 +63,12 @@ object NetworkModule {
     ): AllUseCases {
         return AllUseCases(
             getCurrentWeatherUseCase = GetCurrentWeatherUseCase(networkRepository),
-            saveFavoriteWeatherUseCase = SaveFavoriteWeatherUseCase(localRepository)
+            saveFavoriteWeatherUseCase = SaveFavoriteWeatherUseCase(localRepository),
+            getWeatherByIdUseCase = GetWeatherByIdUseCase(localRepository),
+            deleteWeatherByIdUseCase = DeleteWeatherByIdUseCase(localRepository),
+            getAllFavoriteWeathersUseCase = GetAllFavoriteWeathersUseCase(localRepository),
+            saveThemeUseCase = SaveThemeUseCase(localRepository),
+            getThemeUseCase = GetThemeUseCase(localRepository)
         )
     }
 }

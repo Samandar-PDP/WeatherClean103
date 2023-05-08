@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.sdk.weatherclean.data.database.WeatherDao
 import com.sdk.weatherclean.data.database.WeatherDatabase
+import com.sdk.weatherclean.data.manager.DataStoreManager
 import com.sdk.weatherclean.data.repository.LocalRepositoryImpl
 import com.sdk.weatherclean.domain.repository.LocalRepository
 import dagger.Module
@@ -37,8 +38,13 @@ object DatabaseModule {
 
     @[Provides Singleton]
     fun provideLocalRepository(
-        dao: WeatherDao
+        dao: WeatherDao,
+        dataStoreManager: DataStoreManager
     ): LocalRepository {
-        return LocalRepositoryImpl(dao)
+        return LocalRepositoryImpl(dao,dataStoreManager)
+    }
+    @[Provides Singleton]
+    fun provideDatastoreManager(@ApplicationContext context: Context): DataStoreManager {
+        return DataStoreManager(context)
     }
 }

@@ -8,4 +8,7 @@ interface LocalRepository {
     suspend fun deleteWeather(id: Int)
     fun getWeatherById(id: Int): Flow<CurrentWeather?>
     fun getWeatherList(): Flow<List<CurrentWeather>>
+
+    suspend fun saveTheme(index: Int)
+    fun getTheme(): Flow<Int>
 }

@@ -22,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -113,7 +115,8 @@ fun WeatherItem(
         Image(
             painter = painterResource(id = icon),
             contentDescription = "",
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
         )
         Spacer(modifier = Modifier.width(15.dp))
         Text(

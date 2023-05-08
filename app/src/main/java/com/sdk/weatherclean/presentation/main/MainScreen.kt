@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,6 +36,7 @@ import com.sdk.weatherclean.presentation.component.BottomBar
 import com.sdk.weatherclean.presentation.component.CustomTopBar
 import com.sdk.weatherclean.presentation.component.SearchTextField
 import com.sdk.weatherclean.presentation.favorite.FavoriteScreen
+import com.sdk.weatherclean.presentation.favorite.FavoriteViewModel
 import com.sdk.weatherclean.presentation.locations.LocationEvent
 import com.sdk.weatherclean.presentation.locations.LocationViewModel
 import com.sdk.weatherclean.presentation.locations.LocationsScreen
@@ -55,6 +58,7 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
 
     val locationViewModel = hiltViewModel<LocationViewModel>()
+    val state by locationViewModel.state.collectAsState()
     var isFabVisible by remember {
         mutableStateOf(true)
     }
@@ -90,8 +94,7 @@ fun MainScreen() {
                                     message = "Query must be not empty!"
                                 )
                             }
-                        }
-                        else {
+                        } else {
                             locationViewModel.onEvent(LocationEvent.OnSearched(it))
                         }
                     },
@@ -110,8 +113,16 @@ fun MainScreen() {
                 exit = fadeOut(),
                 enter = fadeIn()
             ) {
-                FloatingActionButton(onClick = { }) {
-                    Icon(imageVector = Icons.Outlined.Favorite, contentDescription = "favorite")
+                FloatingActionButton(
+                    onClick = {
+                        locationViewModel.onEvent(LocationEvent.OnUpdateWeather(state.success!!))
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (state.isLiked) Icons.Default.Favorite else Icons.Outlined.Favorite,
+                        contentDescription = "favorite",
+                        tint = if (state.isLiked) Color.Red else Color.Black
+                    )
                 }
             }
         }
@@ -123,13 +134,24 @@ fun MainScreen() {
             startDestination = BottomBarScreen.Locations.route
         ) {
             composable(route = BottomBarScreen.Locations.route) {
-                val state by locationViewModel.state.collectAsState()
                 LocationsScreen(
                     state = state
                 )
             }
             composable(route = BottomBarScreen.Favorite.route) {
-                FavoriteScreen()
+                val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+                val favoriteState by favoriteViewModel.state.collectAsState()
+                FavoriteScreen(
+                    favoriteState,
+                    onEvent = {
+                        favoriteViewModel.onEvent(it)
+                        scope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = "Deleted"
+                            )
+                        }
+                    }
+                )
             }
             composable(route = BottomBarScreen.Settings.route) {
                 SettingScreen()

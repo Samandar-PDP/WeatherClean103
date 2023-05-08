@@ -3,22 +3,38 @@ package com.sdk.weatherclean.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "CurrentWeather")
 data class CurrentWeather(
-    val long: Double,
-    val lat: Double,
-    val title: String,
-    val description: String,
-    val icon: String,
-    val temp: Double,
-    val pressure: Int,
-    val humidity: Int,
-    val name: String,
-    val timeZone: Int,
-    val wind: Double,
-    val country: String,
-    val id: Int
-) {
+    var long: Double,
+    var lat: Double,
+    var title: String,
+    var description: String,
+    var icon: String,
+    var temp: Double,
+    var pressure: Int,
+    var humidity: Int,
+    var name: String,
+    var timeZone: Int,
+    var wind: Double,
+    var country: String,
+    var id: Int,
     @PrimaryKey(autoGenerate = true)
-    val roomId: Int = 0
+    var roomId: Int = 0
+) {
+    constructor() : this(
+        0.0,
+        0.0,
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        "",
+        0,
+        0.0,
+        "",
+        0,
+        0
+    )
 }
